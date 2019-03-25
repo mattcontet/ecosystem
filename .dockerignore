@@ -1,0 +1,6 @@
+/.git/
+/.gitignore
+/.idea
+/.env.dist
+/LICENSE
+/README.md

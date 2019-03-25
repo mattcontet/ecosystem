@@ -1,0 +1,74 @@
+version: "3.4"
+
+services:
+  elasticsearch:
+    build: elasticsearch
+    env_file: .env
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+  maildev:
+    image: djfarrelly/maildev
+    env_file: .env
+    depends_on:
+      - php
+    ports:
+      - 1080:80
+
+  mysql:
+    image: mariadb:latest
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    tty: true
+
+  nginx:
+    build: nginx
+    env_file: .env
+    ports:
+      - 80:80
+    volumes:
+      # Projects files
+      - ${WEBSITES}:/var/www/html:rw,delegated
+      # Websites configuration
+      - ./nginx/site-available:/etc/nginx/conf.d/:ro
+      # Logs
+      - ./nginx/log:/var/log/nginx
+    depends_on:
+      - php
+    tty: true
+
+  php:
+    build:
+      context: ./php
+      target: ${DOCKER_PHP_IMAGE}
+    env_file: .env
+    volumes:
+      # Projects files
+      - ${WEBSITES}:/var/www/html:rw,delegated
+      # Custom configuration
+      - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+      # SSH keys
+      - ~/.ssh:/root/.ssh:ro
+    depends_on:
+      - mysql
+      - redis
+      - elasticsearch
+    tty: true
+    links:
+      - mysql
+      - redis
+
+  redis:
+    image: redis:3.2-alpine
+    env_file: .env
+    volumes:
+      - redis:/data
+    tty: true
+
+volumes:
+  elasticsearch: {}
+  mysql: {}
+  redis: {}

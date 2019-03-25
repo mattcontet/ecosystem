@@ -1,0 +1,6 @@
+.env
+/nginx/site-available/*.conf
+!/nginx/site-available/ecosystem.conf
+/nginx/log/*
+!/nginx/log/.gitkeep
+/php/bash_aliases
