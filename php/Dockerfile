@@ -63,6 +63,13 @@ RUN apt-get update && \
 RUN pecl install apcu igbinary redis && \
     docker-php-ext-enable apcu igbinary redis
 
+# Install GMP
+RUN apt-get update -y && \
+	apt-get install -y libgmp-dev re2c libmhash-dev libmcrypt-dev file && \
+	ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ && \
+	docker-php-ext-configure gmp && \
+	docker-php-ext-install gmp
+
 # Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
