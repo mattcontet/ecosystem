@@ -66,7 +66,8 @@ stop: ## Stop the environment
 	$(DOCKER_COMPOSE) stop
 
 restart: ## Restart the environment
-	$(DOCKER_COMPOSE) restart
+	make stop
+	make start
 
 install: build start ## Install the environment
 
