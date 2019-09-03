@@ -4,3 +4,5 @@
 /nginx/log/*
 !/nginx/log/.gitkeep
 /php/bash_aliases
+/php/custom_crontab
+/php/conf.d/custom.ini

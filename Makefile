@@ -41,22 +41,44 @@ DOCKER_COMPOSE  = docker-compose
 ## =============================================================================
 ##
 
-build: ## Build the environment
-	@if [[ ! -f .env ]]; then \
-		echo 'The default configuration has been applied because the ".env" file was not configured.'; \
-		cp env.dist .env; \
-	fi
+aliases: ## Configure aliases
 	@if [[ ! -f php/bash_aliases ]]; then \
-		echo 'The default aliases has been applied because the "bash_aliases" file was not configured.'; \
 		cp php/bash_aliases.dist php/bash_aliases; \
-	fi
-	$(DOCKER_COMPOSE) build --pull
+		echo $(JAUNE)WARNING: The default configuration has been applied because the "bash_aliases" file was not configured.$(NORMAL); \
+	else \
+        echo $(VERT)bash_aliases file already configured$(NORMAL); \
+    fi
 
-setup: ## Configure the environment variables
+cron: ## Configure the crontab file
+	@if [[ ! -f php/custom_crontab ]]; then \
+		cp php/custom_crontab.dist php/custom_crontab; \
+		echo $(JAUNE)WARNING: The default configuration has been applied because the "custom_crontab" file was not configured.$(NORMAL); \
+	else \
+		echo $(VERT)custom_crontab file already configured$(NORMAL); \
+	fi
+
+ini: ## Configure the custom.ini file
+	@if [[ ! -f php/conf.d/custom.ini ]]; then \
+		cp php/conf.d/custom.ini.dist php/conf.d/custom.ini; \
+		echo $(JAUNE)WARNING: The default configuration has been applied because the "custom.ini" file was not configured.$(NORMAL); \
+	else \
+		echo $(VERT)custom.ini file already configured$(NORMAL); \
+	fi
+
+env: ## Configure the env file
 	@if [[ ! -f .env ]]; then \
 		cp .env.dist .env; \
+		echo $(JAUNE)WARNING: The default configuration has been applied because the ".env" file was not configured.$(NORMAL); \
+	else \
+		echo $(VERT).env file already configured$(NORMAL); \
 	fi
-	nano .env
+
+setup: ## Setup the environment
+setup: aliases cron ini env
+
+build: ## Build the environment
+	make setup
+	$(DOCKER_COMPOSE) build --pull
 
 start: ## Start the environment
 	$(DOCKER_COMPOSE) up -d --remove-orphans

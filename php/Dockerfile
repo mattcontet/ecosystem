@@ -57,6 +57,7 @@ RUN apt-get update && \
         xsl \
         zip && \
 #    perl -pi -e "s/mailhub=mail/mailhub=maildev/" /etc/msmtp/msmtp.conf && \
+    perl -pi -e "s|;pm.status_path = /status|pm.status_path = /php_fpm_status|g" /usr/local/etc/php-fpm.d/www.conf && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Apcu, Igbinary, Imagick, Redis and ssh2
@@ -71,7 +72,10 @@ RUN apt-get update -y && \
 	docker-php-ext-install gmp
 
 # Install Composer globally
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer global require "hirak/prestissimo" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
 # Install Node.js & co
@@ -84,6 +88,9 @@ RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
     rm -rf /var/lib/apt/lists/*
 
 ADD bash_aliases /root/.bashrc
+
+# Add crontab file in the cron directory
+ADD custom_crontab /var/spool/cron/crontabs/root
 
 RUN usermod -u 1000 www-data
 

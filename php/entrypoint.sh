@@ -1,5 +1,5 @@
-#!/usr/bin/env sh
-set -euo pipefail
+#!/usr/bin/env bash
+set -euxo pipefail
 
 /etc/init.d/cron start
 
