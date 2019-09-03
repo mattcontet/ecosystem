@@ -29,8 +29,8 @@ RUN apt-get update && \
         libxslt-dev \
         libzip-dev \
         mailutils \
+        mariadb-client \
         moreutils \
-        mysql-client \
         nano \
         net-tools \
         netcat \
@@ -38,7 +38,7 @@ RUN apt-get update && \
         p7zip-full \
         procps \
         ssh-client \
-        ssmtp \
+        msmtp \
         unzip \
         vim \
         wget \
@@ -56,7 +56,7 @@ RUN apt-get update && \
         xml \
         xsl \
         zip && \
-    perl -pi -e "s/mailhub=mail/mailhub=maildev/" /etc/ssmtp/ssmtp.conf && \
+#    perl -pi -e "s/mailhub=mail/mailhub=maildev/" /etc/msmtp/msmtp.conf && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Apcu, Igbinary, Imagick, Redis and ssh2
@@ -86,3 +86,9 @@ RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
 ADD bash_aliases /root/.bashrc
 
 RUN usermod -u 1000 www-data
+
+# Install custom entrypoint
+COPY entrypoint.sh /usr/local/bin/docker-custom-entrypoint
+RUN chmod 777 /usr/local/bin/docker-custom-entrypoint
+CMD ["php-fpm"]
+ENTRYPOINT ["docker-custom-entrypoint"]
