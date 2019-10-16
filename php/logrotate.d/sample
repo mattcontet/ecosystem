@@ -1,0 +1,20 @@
+/path/to/your/log/folder/*.log {
+    su root adm
+
+    daily
+
+    missingok
+
+    rotate 50
+
+    notifempty
+
+    compress
+    delaycompress
+
+    sharedscripts
+
+    postrotate
+    endscript
+
+}

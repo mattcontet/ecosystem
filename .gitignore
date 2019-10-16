@@ -6,3 +6,5 @@
 /php/bash_aliases
 /php/custom_crontab
 /php/conf.d/custom.ini
+/php/logrotate.d/*
+!/php/logrotate.d/sample

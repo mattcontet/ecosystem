@@ -53,6 +53,8 @@ services:
       - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       # SSH keys
       - ~/.ssh:/root/.ssh:ro
+      # Logrotate
+      - ./php/logrotate.d:/etc/logrotate.d
     depends_on:
       - mysql
       - redis

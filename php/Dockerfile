@@ -28,6 +28,7 @@ RUN apt-get update && \
         libxml2-utils \
         libxslt-dev \
         libzip-dev \
+        logrotate \
         mailutils \
         mariadb-client \
         moreutils \
