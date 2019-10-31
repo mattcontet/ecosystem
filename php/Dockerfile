@@ -24,6 +24,7 @@ RUN apt-get update && \
         libpng-dev \
         libssh2-1-dev \
         libssl-dev \
+        libwebp-dev \
         libxml2-dev \
         libxml2-utils \
         libxslt-dev \
@@ -40,11 +41,20 @@ RUN apt-get update && \
         procps \
         ssh-client \
         msmtp \
+        npm \
         unzip \
         vim \
         wget \
+        yarn \
         zip && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-configure gd \
+        --with-freetype-dir=/usr/include/ \
+        --with-gd \
+        --with-jpeg-dir=/usr/include/ \
+        --with-png-dir=/usr/include/ \
+        --with-webp-dir=/usr/include/ && \
+    docker-php-ext-configure zip \
+        --with-libzip && \
     docker-php-ext-install \
         bcmath \
         gd \
@@ -57,9 +67,8 @@ RUN apt-get update && \
         xml \
         xsl \
         zip && \
-#    perl -pi -e "s/mailhub=mail/mailhub=maildev/" /etc/msmtp/msmtp.conf && \
-    perl -pi -e "s|;pm.status_path = /status|pm.status_path = /php_fpm_status|g" /usr/local/etc/php-fpm.d/www.conf && \
-    rm -rf /var/lib/apt/lists/*
+    perl -pi -e "s|;pm.status_path = /status|pm.status_path = /php_fpm_status|g" /usr/local/etc/php-fpm.d/www.conf
+#    rm -rf /var/lib/apt/lists/*
 
 # Install Apcu, Igbinary, Imagick, Redis and ssh2
 RUN pecl install apcu igbinary redis && \
@@ -76,17 +85,18 @@ RUN apt-get update -y && \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer config --global repos.packagist composer https://repo.packagist.org && \
     composer global require "hirak/prestissimo" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
 # Install Node.js & co
-RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
-    apt-get install -y --no-install-recommends nodejs && \
-    npm install -g grunt-cli gulp-cli && \
-	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn && \
-    rm -rf /var/lib/apt/lists/*
+#RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
+#    apt-get install -y --no-install-recommends nodejs && \
+#    npm install -g grunt-cli gulp-cli && \
+#	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+#    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+#    apt-get update && apt-get install -y yarn && \
+#    rm -rf /var/lib/apt/lists/*
 
 ADD bash_aliases /root/.bashrc
 
