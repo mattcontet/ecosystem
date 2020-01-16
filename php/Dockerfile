@@ -45,7 +45,6 @@ RUN apt-get update && \
         unzip \
         vim \
         wget \
-        yarn \
         zip && \
     docker-php-ext-configure gd \
         --with-freetype-dir=/usr/include/ \
@@ -67,8 +66,8 @@ RUN apt-get update && \
         xml \
         xsl \
         zip && \
-    perl -pi -e "s|;pm.status_path = /status|pm.status_path = /php_fpm_status|g" /usr/local/etc/php-fpm.d/www.conf
-#    rm -rf /var/lib/apt/lists/*
+    perl -pi -e "s|;pm.status_path = /status|pm.status_path = /php_fpm_status|g" /usr/local/etc/php-fpm.d/www.conf && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Apcu, Igbinary, Imagick, Redis and ssh2
 RUN pecl install apcu igbinary redis && \
@@ -89,6 +88,15 @@ RUN \
     composer global config minimum-stability alpha && \
     composer global require "hirak/prestissimo" "sensiolabs-de/deprecation-detector" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
+
+# Install yarn
+RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
+    apt-get install -y --no-install-recommends nodejs && \
+    npm install -g grunt-cli gulp-cli && \
+	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install -y yarn && \
+    rm -rf /var/lib/apt/lists/*
 
 ADD bash_aliases /root/.bashrc
 

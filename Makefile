@@ -73,8 +73,7 @@ env: ## Configure the env file
 		echo $(VERT).env file already configured$(NORMAL); \
 	fi
 
-setup: ## Setup the environment
-setup: aliases cron ini env
+setup: aliases cron ini env ## Setup the environment
 
 build: ## Build the environment
 	make setup
