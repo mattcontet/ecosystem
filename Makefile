@@ -120,16 +120,16 @@ go: ## Open a terminal in the selected container
 	@read -p "Enter container name: " container; \
 	$(DOCKER_COMPOSE) exec $$container sh -c "/bin/bash"
 
-go-mysql: ## Open a terminal in the "mysql" container
+gomysql: ## Open a terminal in the "mysql" container
 	$(DOCKER_COMPOSE) exec mysql sh -c "/bin/bash"
 
-go-php: ## Open a terminal in the "php" container
+gophp: ## Open a terminal in the "php" container
 	$(DOCKER_COMPOSE) exec php sh -c "/bin/bash"
 
-go-nginx: ## Open a terminal in the "nginx" container
+gonginx: ## Open a terminal in the "nginx" container
 	$(DOCKER_COMPOSE) exec nginx sh -c "/bin/bash"
 
-go-redis: ## Open a terminal in the "redis" container
+goredis: ## Open a terminal in the "redis" container
 	$(DOCKER_COMPOSE) exec redis sh -c "/bin/bash"
 
 ps: ## List all containers managed by the environment
@@ -143,7 +143,7 @@ ssh: ## Copy all SSH keys from the host to the "php" container
 	$(DOCKER) cp ~/.ssh $(shell docker-compose ps -q php):/root/.ssh
 	$(DOCKER_COMPOSE) exec -T php sh -c "echo 'eval \$$(ssh-agent) && ssh-add' >> /root/.bashrc"
 
-.PHONY: cache logs logs-full go-apache go-mysql go-php go-nginx go-redis ps stats ssh
+.PHONY: cache logs logs-full goapache gomysql gophp gonginx goredis ps stats ssh
 
 .DEFAULT_GOAL := help
 help:
