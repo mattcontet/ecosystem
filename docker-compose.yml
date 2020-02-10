@@ -7,13 +7,15 @@ services:
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
 
-  maildev:
-    image: djfarrelly/maildev
+  mailhog:
+    image: mailhog/mailhog
     env_file: .env
     depends_on:
       - php
+    restart: always
     ports:
-      - 1080:80
+      - 1025:1025
+      - 8025:8025
 
   mysql:
     image: mysql:5.7
