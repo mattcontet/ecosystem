@@ -2,10 +2,21 @@ version: "3.4"
 
 services:
   elasticsearch:
-    build: elasticsearch
+    build:
+      context: ./elasticsearch
     env_file: .env
+    ports:
+      - 9200:9200
+      - 9300:9300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch:/usr/share/elasticsearch/data:rw
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+    tty: true
 
   mailhog:
     image: mailhog/mailhog
