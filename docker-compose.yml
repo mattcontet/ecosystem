@@ -2,21 +2,12 @@ version: "3.4"
 
 services:
   elasticsearch:
-    build:
-      context: ./elasticsearch
-    env_file: .env
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.8
     ports:
       - 9200:9200
-      - 9300:9300
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - elasticsearch:/usr/share/elasticsearch/data:rw
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-    tty: true
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=asrp13bgv2
 
   mailhog:
     image: mailhog/mailhog
@@ -85,6 +76,5 @@ services:
     tty: true
 
 volumes:
-  elasticsearch: {}
   mysql: {}
   redis: {}
