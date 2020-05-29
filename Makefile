@@ -90,7 +90,7 @@ down: ## Stop and remove containers, networks, images, and volumes
 	$(DOCKER_COMPOSE) down
 
 restart: ## Restart the environment
-	make stop
+	make down
 	make start
 
 install: build start ## Install the environment
