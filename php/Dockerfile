@@ -89,6 +89,10 @@ RUN \
     composer global require "hirak/prestissimo" "sensiolabs-de/deprecation-detector" --no-suggest --optimize-autoloader --classmap-authoritative
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
+# Install Symfony CLI
+RUN wget https://get.symfony.com/cli/installer -O - | bash && \
+    mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
 # Install yarn
 RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
     apt-get install -y --no-install-recommends nodejs && \
