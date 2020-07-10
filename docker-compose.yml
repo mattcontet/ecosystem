@@ -30,6 +30,12 @@ services:
       - mysql:/var/lib/mysql
     tty: true
 
+  pgsql:
+    image: postgres:11.8
+    volumes:
+      - postgres:/var/lib/postgresql/data/pgdata
+    env_file: .env
+
   nginx:
     build: nginx
     env_file: .env
@@ -62,6 +68,7 @@ services:
       # Logrotate
       - ./php/logrotate.d:/etc/logrotate.d
     depends_on:
+      - pgsql
       - mysql
       - redis
       - elasticsearch
@@ -77,8 +84,16 @@ services:
       - redis:/data
     tty: true
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mysql
+
 volumes:
   mysql: {}
+  postgres: {}
   esdata:
     driver: local
   redis: {}

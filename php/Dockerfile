@@ -11,7 +11,6 @@ RUN apt-get update && \
         cron \
         curl \
         dnsutils \
-        git \
         gnupg \
         jpegoptim \
         jq \
@@ -22,6 +21,7 @@ RUN apt-get update && \
         libjpeg-dev \
         libmcrypt-dev \
         libpng-dev \
+        libpq-dev \
         libssh2-1-dev \
         libssl-dev \
         libwebp-dev \
@@ -33,17 +33,14 @@ RUN apt-get update && \
         mailutils \
         mariadb-client \
         moreutils \
-        nano \
-        net-tools \
-        netcat \
         openssl \
         p7zip-full \
+        postgresql \
+        postgresql-contrib \
         procps \
-        ssh-client \
         msmtp \
         npm \
         unzip \
-        vim \
         wget \
         zip && \
     docker-php-ext-configure gd \
@@ -62,6 +59,7 @@ RUN apt-get update && \
         mbstring \
         opcache \
         pdo_mysql \
+        pdo_pgsql \
         soap \
         xml \
         xsl \
