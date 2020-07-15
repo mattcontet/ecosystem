@@ -11,6 +11,7 @@ RUN apt-get update && \
         cron \
         curl \
         dnsutils \
+        git \
         gnupg \
         jpegoptim \
         jq \
