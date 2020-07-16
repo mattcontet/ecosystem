@@ -89,9 +89,9 @@ stop: ## Stop the environment
 down: ## Stop and remove containers, networks, images, and volumes
 	$(DOCKER_COMPOSE) down
 
-restart: ## Restart the environment
-	make down
-	make start
+reup: down start ## Reup the environment
+
+restart: stop start ## Restart the environment
 
 install: build start ## Install the environment
 
