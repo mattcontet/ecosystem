@@ -34,6 +34,7 @@ RUN apt-get update && \
         mailutils \
         mariadb-client \
         moreutils \
+        nano \
         openssl \
         p7zip-full \
         postgresql \
