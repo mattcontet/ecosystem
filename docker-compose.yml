@@ -62,7 +62,7 @@ services:
       # Projects files
       - ${WEBSITES}:/var/www/html:rw,delegated
       # Custom configuration
-      - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+      - ./php/conf.d/custom.ini:/usr/local/etc/php/conf.d/x-custom.ini:ro
       # SSH keys
       - ~/.ssh:/root/.ssh:ro
       # Logrotate
