@@ -59,6 +59,7 @@ RUN apt-get update && \
         iconv \
         intl \
         mbstring \
+        mysqli \
         opcache \
         pdo_mysql \
         pdo_pgsql \
