@@ -41,7 +41,6 @@ RUN apt-get update && \
         postgresql-contrib \
         procps \
         msmtp \
-        npm \
         unzip \
         wget \
         zip && \
@@ -85,9 +84,7 @@ RUN apt-get update -y && \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    composer config --global repos.packagist composer https://repo.packagist.org && \
-    composer global config minimum-stability alpha && \
-    composer global require "hirak/prestissimo" "sensiolabs-de/deprecation-detector" --no-suggest --optimize-autoloader --classmap-authoritative
+    composer config --global repos.packagist composer https://repo.packagist.org
 ENV PATH "${PATH}:/root/.composer/vendor/bin"
 
 # Install Symfony CLI
@@ -95,9 +92,8 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && \
     mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 # Install yarn
-RUN curl -sS https://deb.nodesource.com/setup_10.x | bash && \
-    apt-get install -y --no-install-recommends nodejs && \
-    npm install -g grunt-cli gulp-cli && \
+RUN curl -sS https://deb.nodesource.com/setup_14.x | bash && \
+    apt-get update && apt-get install -y --no-install-recommends nodejs && \
 	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get install -y yarn && \
