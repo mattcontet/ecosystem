@@ -13,6 +13,7 @@ RUN apt-get update && \
         dnsutils \
         git \
         gnupg \
+        iputils-ping \
         jpegoptim \
         jq \
         libcurl4-openssl-dev \
