@@ -34,6 +34,7 @@ RUN apt-get update && \
         logrotate \
         mailutils \
         mariadb-client \
+        msmtp \
         moreutils \
         nano \
         openssl \
@@ -41,7 +42,7 @@ RUN apt-get update && \
         postgresql \
         postgresql-contrib \
         procps \
-        msmtp \
+        redis-server \
         unzip \
         wget \
         zip && \
@@ -55,6 +56,8 @@ RUN apt-get update && \
         --with-libzip && \
     docker-php-ext-install \
         bcmath \
+        curl \
+        exif \
         gd \
         iconv \
         intl \
@@ -73,6 +76,13 @@ RUN apt-get update && \
 # Install Apcu, Igbinary, Imagick, Redis and ssh2
 RUN pecl install apcu igbinary redis && \
     docker-php-ext-enable apcu igbinary redis
+RUN cd /tmp  && \
+    wget http://download.redis.io/redis-stable.tar.gz && \
+    tar xvzf redis-stable.tar.gz && \
+    cd redis-stable && \
+    make && \
+    cp src/redis-cli /usr/local/bin/ && \
+    chmod 755 /usr/local/bin/redis-cli
 
 # Install GMP
 RUN apt-get update -y && \
@@ -91,6 +101,11 @@ ENV PATH "${PATH}:/root/.composer/vendor/bin"
 # Install Symfony CLI
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
     mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+# Local PHP Security Checker
+RUN wget https://github.com/fabpot/local-php-security-checker/releases/download/v1.0.0/local-php-security-checker_1.0.0_linux_amd64 && \
+    mv local-php-security-checker_1.0.0_linux_amd64 /usr/bin/local-php-security-checker && \
+    chmod 755 /usr/bin/local-php-security-checker
 
 # Install yarn
 RUN curl -sS https://deb.nodesource.com/setup_14.x | bash && \

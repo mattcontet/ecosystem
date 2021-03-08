@@ -78,11 +78,10 @@ services:
       - redis
 
   redis:
-    image: redis:3.2-alpine
-    env_file: .env
+    image: redis:6.0.10-buster
+    entrypoint: redis-server --appendonly yes
     volumes:
       - redis:/data
-    tty: true
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
