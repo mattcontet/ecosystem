@@ -73,6 +73,14 @@ env: ## Configure the env file
 		echo $(VERT).env file already configured$(NORMAL); \
 	fi
 
+clean: ## Clean caches
+	$(DOCKER) builder prune -a -f
+	$(DOCKER) volume prune -f
+	$(DOCKER) network prune -f
+	$(DOCKER) image prune -a -f
+	$(DOCKER) container prune -f
+	$(DOCKER) system prune -f
+
 setup: aliases cron ini env ## Setup the environment
 
 build: ## Build the environment
@@ -93,13 +101,13 @@ reup: down start ## Reup the environment
 
 restart: stop start ## Restart the environment
 
-install: build start ## Install the environment
+install: build start clean ## Install the environment
 
 uninstall: ## Uninstall the environment
 	$(DOCKER_COMPOSE) kill
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
-.PHONY: build setup start stop restart install uninstall
+.PHONY: clean build setup start stop restart install uninstall
 
 ##
 ## =============================================================================

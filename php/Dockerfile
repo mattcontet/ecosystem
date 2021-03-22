@@ -38,6 +38,7 @@ RUN apt-get update && \
         moreutils \
         nano \
         openssl \
+        optipng \
         p7zip-full \
         postgresql \
         postgresql-contrib \
